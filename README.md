@@ -118,7 +118,7 @@ GRANT ALL PRIVILEGES ON pg_test . * TO '<username>'@'localhost';
 ```
 _For example:_
 ```
-GRANT ALL PRIVILEGES ON eb_test . * TO 'user1'@'localhost';
+GRANT ALL PRIVILEGES ON pg_test . * TO 'user1'@'localhost';
 ```
 **3.11. Each time you update or change a permission be sure to use the Flush Privileges command:**
 ```
