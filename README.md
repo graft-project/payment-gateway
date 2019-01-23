@@ -6,11 +6,18 @@
 Also can handle online payments, plugin for work with platform WooCommerce.
  
 **Hardware / Systems Requirement: **
-For build:  two dual core CPU with 8GB RAM and 100 Gb;
-For run: dual core CPU with 2GB RAM and 100 Gb. 
-Payment Gateway has to be directly accessible from the Internet (public IP), preferably with low-latency, high speed network connection. Payment Gateway will most likely want to implement high availability and have a low-latency connection to a high-speed network.
+
+**OS:** Ubuntu **18.04** LTS Bionic
+
+Name|Build Requirments	|Run Requirements
+----|-------------------|----------------
+RAM, GB |	8	|2
+CPU, Cores	|2	|2
+Storage, GB	|100	|100
+
+_Note:_ In order to GraftNode (also called the cryptonode) work properly 28680 (P2P) port should be opened for incoming and outgoing traffic. If you are using other ports, please, make sure that you are open P2P port of the cryptonode.
  
-Prerequisites:
+## Prerequisites:
 - OS Linux, version - Needs Ubuntu 18 to build graft node (you have to install it yourself), Connections established from the Node are using P2P network. In order to work properly 28680 port should be opened for incoming and outgoing traffic.
 - MySQL server, version - was tested with 8.0.13 
 - SMTP Server credentials (you have to do it yourself)
@@ -143,7 +150,7 @@ Include MySQL to  autorun:
 sudo systemctl enable mysql 
 ```
 ### 4.   **Nginx** setup
-> **_If nginx was installed for Payment Gateway you need doing only command marked bold._**
+> **_If nginx was installed for Exchange Broker you need doing only command marked bold._**
 
 4.1. Install nginx
 ```
@@ -163,7 +170,7 @@ sudo systemctl enable nginx
 ```
 **4.5.  Creating Self-signed Certificates:**
 ```
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/<name+domain name >.key -out /etc/ssl/certs/eb-test.graft.network.crt
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/<name+domain name >.key -out /etc/ssl/certs/pg-test.graft.network.crt
 ```
 _For example:_
 For pg-test.graft.network
