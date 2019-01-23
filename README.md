@@ -98,7 +98,7 @@ You stay in mysql>
 
 create new database:
 ```
-create database <DB name for ExchangeBroker>
+create database <DB name for PaymentGateway>
 ```
 _For example:_
 ```
