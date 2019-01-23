@@ -417,3 +417,30 @@ For example:
 https://pg-test.graft.network
 ```
 8.2.  You should see the screen Payment Gateway Terminal (pic.1):
+
+
+8.3. Press  Login button (pic.1, [1]) 
+8.4. You should see the screen (pic.2):
+![2019-01-17_17-26-40](https://user-images.githubusercontent.com/45132833/51634165-3cdbc980-1f5c-11e9-9e9d-185b9311563d.png)
+Pic.1
+ 
+8.5. Enter admin in field (pic.2, [1]), password(pic.2, [2])  from setting section “Admin”  and press “Log in” button (pic.2, [3]).
+
+8.6. Payment Gateway Terminal is successful installed if you should see the main menu on the  screen (pic.3):
+
+![2019-01-23_22-23-45](https://user-images.githubusercontent.com/45132833/51634704-9bee0e00-1f5d-11e9-9a3b-0cda47f82534.png)
+8.7. You have to do next steps with guides “Service Provider” and “Merchant” .
+
+
+## 9. Probable errors list:
+
+**Error # 1**
+
+![r_3](https://user-images.githubusercontent.com/45132833/51634718-a3adb280-1f5d-11e9-8d9f-6e013e017c30.png)
+**Solution:** Run Payment Gateway (see )
+
+**Error # 2**
+
+![2019-01-23_22-25-22](https://user-images.githubusercontent.com/45132833/51634809-db1c5f00-1f5d-11e9-83ed-8c61e39e9a43.png)
+**Solution:** check entered login and password with  setting section “Admin”.
+
