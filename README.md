@@ -430,7 +430,7 @@ Pic.1
 
 8.4. You should see the screen (pic.2):
 
-![2019-01-17_17-26-40](https://user-images.githubusercontent.com/45132833/51634165-3cdbc980-1f5c-11e9-9e9d-185b9311563d.png)
+![2019-01-23_22-45-30](https://user-images.githubusercontent.com/45132833/51636154-369c1c00-1f61-11e9-867d-364a632656d7.png)
 
 Pic.2
  
