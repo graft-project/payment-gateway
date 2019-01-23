@@ -396,7 +396,7 @@ where:
 cd /home/ubuntu/graft/pg 
 nohup ./PaymentGateway &
 ``` 
-After this payment gateway should be accessible via https://localhost:44393 URL. In case of issues see log files. If you need to restart the application, e.g. when editing configuration files, use following commands:
+After this payment gateway should be accessible  https://<name of your site> URL. In case of issues see log files. If you need to restart the application, e.g. when editing configuration files, use following commands:
 ``` 
 pkill PaymentGateway
 nohup ./PaymentGateway &
@@ -407,8 +407,7 @@ Payment Gateway application writes log files into logs directory (in our example
 pkill PaymentGateway
 nohup ./PaymentGateway &
 ``` 
-You can find more information about ‘nlog.config’ here.
- 
+
 ## 8. Verify Installation:
 
 8.1. Open the link:
