@@ -277,7 +277,9 @@ cd payment-gateway/PaymentGateway
 dotnet publish  -c release -v d -o "/home/ubuntu/graft/pg" --framework netcoreapp2.1 --runtime linux-x64 PaymentGateway.csproj
 ```
 Where 
+
 **/home/ubuntu/graft/pg** - a folder where  stored the binaries (created automatically),
+
 **Ubuntu** - username for OS Ubuntu.
 
 After this you will have compiled binaries of the Payment Gateway stored in the folder /home/ubuntu/graft/pg. The next step is to prepare the database.
@@ -324,6 +326,7 @@ After this edit following sections:
   },
 ``` 
 **_service_name_** - is a placeholder for the particular service, leave it as it is.
+
 **CheckPeriod** – interval in milliseconds to perform periodical check of the application state  
  
 **6.4. RateCache** - this is internal service responsible for getting and store current exchange rate for the supported cryptocurrencies. At this moment BTC, ETH and GRFT are supported.
@@ -358,6 +361,7 @@ After this edit following sections:
   },
 ```  
 In this section, you can edit ‘Validity’ and ‘TolerancePeriod’ parameters. All other parameters leave as they are.
+
 **Validity** – time period in milliseconds in which we don't need to pull fresh exchange rate from the server.
  
 **TolerancePeriod** – time period in milliseconds in which it is allowed to use stored exchange rate. This parameter used when there are issues accessing the rate server – in this period if the new rate cannot get, old rate will be used.  After the expiration of the Tolerance Period, an error will be produced when trying to make a payment through the gateway.
@@ -418,17 +422,24 @@ https://pg-test.graft.network
 ```
 8.2.  You should see the screen Payment Gateway Terminal (pic.1):
 
+![2019-01-23_22-34-59](https://user-images.githubusercontent.com/45132833/51635534-a90bfc80-1f5f-11e9-8347-e716bc8c3017.png)
 
-8.3. Press  Login button (pic.1, [1]) 
-8.4. You should see the screen (pic.2):
-![2019-01-17_17-26-40](https://user-images.githubusercontent.com/45132833/51634165-3cdbc980-1f5c-11e9-9e9d-185b9311563d.png)
 Pic.1
+
+8.3. Press  Login button (pic.1) 
+
+8.4. You should see the screen (pic.2):
+
+![2019-01-17_17-26-40](https://user-images.githubusercontent.com/45132833/51634165-3cdbc980-1f5c-11e9-9e9d-185b9311563d.png)
+
+Pic.2
  
 8.5. Enter admin in field (pic.2, [1]), password(pic.2, [2])  from setting section “Admin”  and press “Log in” button (pic.2, [3]).
 
 8.6. Payment Gateway Terminal is successful installed if you should see the main menu on the  screen (pic.3):
 
 ![2019-01-23_22-23-45](https://user-images.githubusercontent.com/45132833/51634704-9bee0e00-1f5d-11e9-9a3b-0cda47f82534.png)
+
 8.7. You have to do next steps with guides “Service Provider” and “Merchant” .
 
 
