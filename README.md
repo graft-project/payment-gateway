@@ -23,7 +23,7 @@ _Note:_ In order to GraftNode (also called the cryptonode) work properly 28680 (
 - SMTP Server credentials (you have to do it yourself)
 - GRAFT Node instance (you have to do it with:
  https://github.com/graft-project/graft-ng/wiki/Alpha-RTA-Testnet-Install-&-Usage-Instruction)
-> **_ You don`t need this step if you installed  it  for Exchange Broker _**
+> **_You don`t need this step if you installed  it  for Exchange Broker_**
 
 - Exchange Broker (you have to do it with:
  https://github.com/graft-project/exchange-broker/blob/master/README.md)
@@ -257,3 +257,163 @@ After that, press Ctrl-X and Y and ENTER
 ```
 sudo systemctl restart nginx 
 ```
+
+# Installation
+
+## 5. Installation the Payment Gateway:
+ 
+5.1. Create a folder to store the sources (for example src) and clone the repositories into this folder:
+``` 
+mkdir  src
+cd src
+git clone --recurse-submodules  https://github.com/graft-project/payment-gateway.git
+```
+5.2. Go to folder:
+```
+cd payment-gateway/PaymentGateway 
+```
+5.3. Build and publish the binaries into created folder:
+```
+dotnet publish  -c release -v d -o "/home/ubuntu/graft/pg" --framework netcoreapp2.1 --runtime linux-x64 PaymentGateway.csproj
+```
+Where 
+**/home/ubuntu/graft/pg** - a folder where  stored the binaries (created automatically),
+**Ubuntu** - username for OS Ubuntu.
+
+After this you will have compiled binaries of the Payment Gateway stored in the folder /home/ubuntu/graft/pg. The next step is to prepare the database.
+ 
+ ## 6. Configure Payment Gateway:
+
+All settings related to the Payment Gateway application stored in the config file ‘appsettings.json’ located in the root bin directory, in our case "home/ubuntu/graft/pg".
+Open this file and add/edit  following sections:
+```
+sudo nano /home/ubuntu/graft/pg/appsettings.json
+```
+**6.1 EmailSender** – this settings required to send emails via your SMTP server.
+``` 
+"EmailSender": {
+    "UserName": "<smtp-user-name>",
+    "Password": "<password>",
+    "Server": "<your-server-url>.com",
+    "Port": "587",
+    "Address": "info@graft.network",
+    "DisplayName": "GRAFT Network"
+  },
+``` 
+**6.2. DB** – settings to access previously created database
+``` 
+"DB": {
+    "UserName": "root",
+    "Password": "testpass",
+    "DbName": "payment_gateway",
+    "Server": "127.0.0.1",
+    "Port": "3306"
+  },
+``` 
+Take in mind these sections contain sensitive information!
+After this edit following sections:
+ 
+**6.3. Watcher** – this is internal service responsible for monitoring application state and inform the administrator via email in case of any troubles.
+``` 
+  "Watcher": {
+    "AdminEmails": "admin-addres@mail.com",
+    "ErrorEmailSubject": "Payment Gateway Error (_service_name_)",
+    "WarningEmailSubject": "Payment Gateway Warning (_service_name_)",
+    "RestoreEmailSubject": "Payment Gateway Restore (_service_name_)",
+    "CheckPeriod": "10000"
+  },
+``` 
+**_service_name_** - is a placeholder for the particular service, leave it as it is.
+**CheckPeriod** – interval in milliseconds to perform periodical check of the application state  
+ 
+**6.4. RateCache** - this is internal service responsible for getting and store current exchange rate for the supported cryptocurrencies. At this moment BTC, ETH and GRFT are supported.
+``` 
+"RateCache": {
+	"SupportedCryptocurrencies": [
+  	{
+    	"Validity": 30000,
+   	 "TolerancePeriod": 300000,
+    	"CurrencyCode": "BTC",
+    	"CurrencyName": "Bitcoin",
+    	"Ticker": 1
+  	},
+  	{
+    	"Validity": 30000,
+    	"TolerancePeriod": 300000,
+    	"CurrencyCode": "ETH",
+    	"CurrencyName": "Ethereum",
+    	"Ticker": 1027
+  	},
+  	{
+    	"Validity": 30000,
+    	"TolerancePeriod": 300000,
+    	"CurrencyCode": "GRFT",
+    	"CurrencyName": "GRAFT",
+    	"Ticker": 2571
+  	}
+	],
+	"SendErrorEmail": true,
+	"SendWarningEmail": true,
+	"SendRestoreEmail": true
+  },
+```  
+In this section, you can edit ‘Validity’ and ‘TolerancePeriod’ parameters. All other parameters leave as they are.
+**Validity** – time period in milliseconds in which we don't need to pull fresh exchange rate from the server.
+ 
+**TolerancePeriod** – time period in milliseconds in which it is allowed to use stored exchange rate. This parameter used when there are issues accessing the rate server – in this period if the new rate cannot get, old rate will be used.  After the expiration of the Tolerance Period, an error will be produced when trying to make a payment through the gateway.
+ 
+**6.5. DAPI** – this section contains GRAFT DAPI URL. You need to setup a GRAFT Supernode instance to get this URL. How to setup the GRAFT Supernode described in the Exchange Broker setup instructions.
+``` 
+  "DAPI": {
+	"Url": "http://18.214.197.50:28690/dapi/v2.0/",
+  },
+``` 
+**6.6. ExchangeBroker** – this section contains Exchange Broker URL. See the Exchange Broker setup instructions.
+``` 
+  "ExchangeBroker": {
+	"Url": "https://localhost:44303/v1.0/"
+  },
+``` 
+After you have edited all required parameters, save the ‘appsettings.json’. Next step – database initialization.
+ 
+**6.7. Admin** - settings for service administrator
+```
+"Admin": {
+    "DefaultPassword": "GRAFT_admin1"
+  },
+```
+where:
+**GRAFT_admin1** -  default password for service administrator
+ 
+## 7. Running the Payment Gateway:
+ 
+7.1. To run the application, open a command prompt and run the following commands:
+```
+cd /home/ubuntu/graft/pg 
+nohup ./PaymentGateway &
+``` 
+After this payment gateway should be accessible via https://localhost:44393 URL. In case of issues see log files. If you need to restart the application, e.g. when editing configuration files, use following commands:
+``` 
+pkill PaymentGateway
+nohup ./PaymentGateway &
+``` 
+7.2. Logging
+Payment Gateway application writes log files into logs directory (in our example - ~/graft/pg). How logs are collected configured via ‘nlog.config’ file. You can edit this file, to apply new setting Payment Gateway need to be restarted:
+``` 
+pkill PaymentGateway
+nohup ./PaymentGateway &
+``` 
+You can find more information about ‘nlog.config’ here.
+ 
+## 8. Verify Installation:
+
+8.1. Open the link:
+        https://<name of your site>
+Where:
+ <name of your site> is name, which you created in ngnix + your domain name.
+ 
+For example: 
+```
+https://pg-test.graft.network
+```
+8.2.  You should see the screen Payment Gateway Terminal (pic.1):
