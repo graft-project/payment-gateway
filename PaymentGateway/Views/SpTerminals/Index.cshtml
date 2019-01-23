@@ -1,0 +1,109 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<PaymentGateway.Models.Terminal>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    ViewData["Title"] = "Terminals";
+    ViewData["ActivePage"] = LeftMenuNavPages.Terminals;
+}
+
+<div class="top-buffer"></div>
+
+<form method="get" class="form-inline">
+    <input type="hidden" name="sortExpression" value="@Model.SortExpression" />
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Status</label>
+            <br />
+            <select name="status" asp-for="@Model.RouteValue["Status"]" class="form-control" asp-items="Html.GetEnumSelectList<TerminalStatus>()">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <br />
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Merchant</label>
+            <br />
+            <select name="merchantId" asp-for="@Model.RouteValue["merchantId"]" class="form-control" asp-items="ViewBag.merchantId">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <label class="control-label">Search</label>
+        <br />
+        <input name="filter" class="form-control" placeholder="filter" value="@Model.RouteValue["Filter"]" />
+        <br />
+        <label class="control-label"> </label>
+        <br />
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+        </button>
+    </div>
+</form>
+
+<nav aria-label="Terminals">
+    <vc:pager paging-list="@Model" />
+</nav>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create New</a>
+</p>
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>
+                @Html.SortableHeaderFor(model => model.SerialNumber)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Name)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Status)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Merchant)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Store)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Merchant.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Store.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Terminals">
+    <vc:pager paging-list="@Model" />
+</nav>
+
+Total Record Count: @Model.TotalRecordCount

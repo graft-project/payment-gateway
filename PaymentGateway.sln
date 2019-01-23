@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGateway", "PaymentGateway\PaymentGateway.csproj", "{06969554-EDA1-46EF-9B80-64ED954188C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Graft.Net\Infrastructure\Infrastructure.csproj", "{79A17822-2254-4684-BD80-27A53DC17E42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAPI", "Graft.Net\DAPI\DAPI.csproj", "{DB02786C-57DE-4177-BF27-8523C4819B9D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletRpc", "Graft.Net\WalletRpc\WalletRpc.csproj", "{6BA23650-7689-4E82-8868-7C39F84B5004}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitcoinLib", "Graft.Net\BitcoinLib\BitcoinLib.csproj", "{F0C2B271-5C4C-4201-9A7A-A1360A975B78}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraftLib", "Graft.Net\GraftLib\GraftLib.csproj", "{7F7EA1CD-45BB-4B25-8D15-D01879F56122}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06969554-EDA1-46EF-9B80-64ED954188C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06969554-EDA1-46EF-9B80-64ED954188C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06969554-EDA1-46EF-9B80-64ED954188C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06969554-EDA1-46EF-9B80-64ED954188C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79A17822-2254-4684-BD80-27A53DC17E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79A17822-2254-4684-BD80-27A53DC17E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79A17822-2254-4684-BD80-27A53DC17E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79A17822-2254-4684-BD80-27A53DC17E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB02786C-57DE-4177-BF27-8523C4819B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB02786C-57DE-4177-BF27-8523C4819B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB02786C-57DE-4177-BF27-8523C4819B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB02786C-57DE-4177-BF27-8523C4819B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BA23650-7689-4E82-8868-7C39F84B5004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BA23650-7689-4E82-8868-7C39F84B5004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BA23650-7689-4E82-8868-7C39F84B5004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BA23650-7689-4E82-8868-7C39F84B5004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0C2B271-5C4C-4201-9A7A-A1360A975B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0C2B271-5C4C-4201-9A7A-A1360A975B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0C2B271-5C4C-4201-9A7A-A1360A975B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0C2B271-5C4C-4201-9A7A-A1360A975B78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F7EA1CD-45BB-4B25-8D15-D01879F56122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F7EA1CD-45BB-4B25-8D15-D01879F56122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F7EA1CD-45BB-4B25-8D15-D01879F56122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F7EA1CD-45BB-4B25-8D15-D01879F56122}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BD4357E-8E78-4924-A3C2-2853F1852638}
+	EndGlobalSection
+EndGlobal

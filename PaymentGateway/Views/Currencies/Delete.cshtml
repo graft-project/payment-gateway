@@ -1,0 +1,31 @@
+﻿@model PaymentGateway.Models.Currency
+
+@{
+    ViewData["Title"] = "Delete Currency";
+    ViewData["ActivePage"] = LeftMenuNavPages.Currencies;
+}
+
+<h3>Are you sure you want to delete currency '@Model.Name'?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Code" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,209 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+
+}
+
+a {
+    color: #14a8bb;
+    text-decoration: none;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+
+
+.container {
+    width: initial;
+    box-sizing: border-box;
+}
+
+.navbar-brand {
+    float: left;
+    height: 60px;
+    padding: 20px 20px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.navbar {
+    min-height: 60px;
+    margin-bottom: 0;
+    border: 1px solid transparent;
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: #4FB67A;
+    border-radius: 0;
+}
+
+.nav > li > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    color: #91acc3;
+}
+
+.container .nav > li > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.container .nav > li.active > a {
+    color: #fff;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: rgba(238, 238, 238, 0.08);
+    border-radius: 0;
+}
+
+.cd-label {
+    color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 7px 10px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #4FB67A;
+    border-color: #4FB67A;
+}
+
+.table-condensed > thead > tr > th, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td {
+    padding: 5px;
+    font-size: 13px;
+    word-break: break-word;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    border-bottom-width: 2px;
+    vertical-align: middle;
+}
+
+.clear {
+clear:both;
+}
+
+.table {
+    max-width: 100%;
+    table-layout: initial;
+    margin-bottom: 20px;
+    min-width: 900px;
+    margin-top: 20px;
+}
+
+.navbar-fixed-left {
+    width: 183px;
+    position: fixed;
+    border-radius: 0;
+    height: 100%;
+    top: 62px;
+}
+
+.navbar-inverse {
+    background-color: #34435B;
+    border-color: #34435B;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+}
+
+.navbar-inverse .btn-link {
+      color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar-right {
+    float: right !important;
+    margin-right: 0;
+}
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+    margin-left: -15px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.navbar-fixed-top .navbar-nav > li > a {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.navbar-fixed-top .navbar-nav > li > a:hover {
+     background-color: rgba(238, 238, 238, 0.08);
+}
+
+.navbar-btn {
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+
+.navbar-fixed-left .navbar-nav > li {
+  float: none;  /* Cancel default li float: left */
+  width: 182px;
+}
+
+.navbar-fixed-left + .container {
+    padding-left: 203px;
+    padding-top: 62px;
+}
+
+/* On using dropdown menu (To right shift popuped) */
+.navbar-fixed-left .navbar-nav > li > .dropdown-menu {
+  margin-top: -50px;
+  margin-left: 183px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+.top-buffer {
+    margin-top: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}

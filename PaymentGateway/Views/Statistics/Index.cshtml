@@ -1,0 +1,157 @@
+﻿@model PaymentGateway.Controllers.SearchModelPayments
+
+@{
+    ViewData["Title"] = "Index";
+    ViewData["ActivePage"] = LeftMenuNavPages.Statistics;
+}
+
+<link href="~/css/chartist.css" rel="stylesheet" />
+
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info" role="alert">
+                Total @Html.Raw(Model.ItemTypeTo.ToLower()) count: @Html.Raw(Model.TotalCount)
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Successful @Html.Raw(Model.ItemTypeTo.ToLower()):</h3>
+                </div>
+                <div class="panel-body">
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.Confirmed })">Confirmed <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.Confirmed))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.Received })">Received <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.Received))</span></a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">In progress @Html.Raw(Model.ItemTypeTo.ToLower()):</h3>
+                </div>
+                <div class="panel-body">
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.New })">New <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.New))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.Waiting })">Waiting <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.Waiting))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.InProgress })">In Progress <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.InProgress))</span></a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Failed @Html.Raw(Model.ItemTypeTo.ToLower()):</h3>
+                </div>
+                <div class="panel-body">
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.DoubleSpend })">Double spend <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.DoubleSpend))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.Fail })">Failed <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.Fail))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.NotEnoughAmount })">Not enough currency <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.NotEnoughAmount))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.RejectedByPOS })">Rejected by POS <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.RejectedByPOS))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.RejectedByWallet })">Rejected by wallet <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.RejectedByWallet))</span></a></p>
+                    <p><a href="@Url.Action("Index", Model.ItemTypeTo, new { status = Graft.Infrastructure.PaymentStatus.TimedOut })">Timed out <span class="badge">@Html.Raw(Model.GetStatusCount(Graft.Infrastructure.PaymentStatus.TimedOut))</span></a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Status graph:</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="ct-chart-pie ct-perfect-fourth" id="pieChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@Html.Raw(Model.ItemTypeTo) by service provider:</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="ct-chart-bar ct-golden-section" id="barChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@Html.Raw(Model.ItemTypeTo) by store:</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="ct-chart-line ct-perfect-fourth" id="barChart2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@Html.Raw(Model.ItemTypeTo) by terminal:</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="ct-chart-bar ct-golden-section" id="barChart3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/lib/Chartist/chartist.js"></script>
+    <script>
+            var data = {
+                series: [
+                    @Html.Raw(Model.FailedCount),
+                    @Html.Raw(Model.InProgressCount),
+                    @Html.Raw(Model.SuccessfulCount)
+                     ]
+            };
+
+            var names = ["Failed", "In progress", "Successful"];
+
+            var sum = function (a, b) { return a + b };
+
+            new Chartist.Pie('#pieChart', data, {
+                labelInterpolationFnc: function (value, index) {
+                    percentage = Math.round(value / data.series.reduce(sum) * 100) + '%';
+                    return names[index] + ' ' + percentage;
+                }
+            });
+
+
+            var data2 =
+            {
+                labels: [ @Html.Raw(string.Join(", ", Model.DataSortedByServiceProvider.Keys.Select(x => $"'{x}'")))],
+                series: [[ @Html.Raw( string.Join(", ",Model.DataSortedByServiceProvider.Values.Select(x=>$"{x}"))) ]]
+            };
+
+            new Chartist.Bar('#barChart', data2 );
+
+            var data3 =
+            {
+                labels: [ @Html.Raw(string.Join(", ", Model.DataSortedByStore.Keys.Select(x => $"'{x}'")))],
+                series: [[ @Html.Raw( string.Join(", ",Model.DataSortedByStore.Values.Select(x=>$"{x}"))) ]]
+            };
+
+            new Chartist.Bar('#barChart2', data3);
+
+            var data4 =
+            {
+                labels: [ @Html.Raw(string.Join(", ", Model.DataSortedByTerminal.Keys.Select(x => $"'{x}'")))],
+                series: [[ @Html.Raw( string.Join(", ",Model.DataSortedByTerminal.Values.Select(x=>$"{x}"))) ]]
+            };
+
+            new Chartist.Bar('#barChart3', data4);
+    </script>
+}

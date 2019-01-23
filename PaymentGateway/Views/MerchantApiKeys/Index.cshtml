@@ -1,0 +1,74 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<PaymentGateway.Models.TerminalViewModels.ApiKeyViewModel>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    ViewData["Title"] = "API Keys";
+    ViewData["ActivePage"] = LeftMenuNavPages.ApiKeys;
+}
+
+<div class="top-buffer"></div>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create New</a>
+</p>
+
+<nav aria-label="Terminals">
+    <vc:pager paging-list="@Model" />
+</nav>
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>
+                @Html.SortableHeaderFor(model => model.SerialNumber)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Name)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Status)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.ServiceProviderName)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.StoreName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceProviderName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Terminals">
+    <vc:pager paging-list="@Model" />
+</nav>
+
+Total Record Count: @Model.TotalRecordCount

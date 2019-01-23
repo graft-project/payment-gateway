@@ -1,0 +1,73 @@
+﻿@model IEnumerable<PaymentGateway.Models.ServiceProviderViewModels.ServiceProviderViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    ViewData["ActivePage"] = LeftMenuNavPages.ServiceProviders;
+}
+<div class="top-buffer"></div>
+
+<p>
+    <a asp-action="Invite" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Invite a service provider</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WalletAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionFee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WalletAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionFee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailConfirmed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-action="ResendInvite" asp-route-id="@item.Id">Resend Invite</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

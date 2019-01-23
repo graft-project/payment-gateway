@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PaymentGateway.Models.UserViewModels.UserListViewModel>
+@{
+    ViewData["Title"] = "Service Providers";
+    ViewData["ActivePage"] = LeftMenuNavPages.ServiceProviders;
+}
+<div class="top-buffer"></div>
+@*<div class="panel panel-primary">
+    <div class="panel-heading panel-head">Users</div>
+    <div class="panel-body">*@
+
+        <div class="btn-group">
+            <a asp-action="Invite" class="btn btn-primary">
+                <i class="glyphicon glyphicon-plus"></i>  Invite User
+            </a>
+        </div>
+
+        <div class="top-buffer"></div>
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Email</td>
+                        <td>@item.RoleName</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">
+                                <i class="glyphicon glyphicon-pencil"></i>  Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                <i class="glyphicon glyphicon-trash"></i>  Delete
+                            </a>
+                            <a asp-action="ResendInvite" asp-route-id="@item.Id" class="btn btn-default">
+                                 Resend Invite
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    @*</div>
+</div>*@

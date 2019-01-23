@@ -1,0 +1,23 @@
+﻿@model PaymentGateway.Models.Tags.TagTerminalSelector
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Apply tags for Terminal(@Html.Raw(Model.TerminalId))</h2>
+<form asp-controller="TagTerminalSelectors" asp-action="Index" method="post">
+    <input asp-for="@Model.TerminalId" hidden />
+    <table class="table">
+
+        <tr> <th>Tag name</th> <th>Is enabled</th> </tr>
+
+        @for (int i = 0; i < Model.TagTerminalItems.Count; i++)
+        {
+            <tr>
+                @Html.EditorFor(model => model.TagTerminalItems[i])
+            </tr>
+        }
+
+    </table>
+    <button type="submit">Save</button>
+</form>

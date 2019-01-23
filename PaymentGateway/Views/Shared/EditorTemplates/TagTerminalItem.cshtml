@@ -1,0 +1,10 @@
+﻿@model PaymentGateway.Models.Tags.TagTerminalItem
+
+<input asp-for="@Model.TagId" hidden />
+<input asp-for="@Model.TagName" hidden />
+<td>
+    @Html.DisplayFor(model => model.TagName)
+</td>
+<td>
+    <input asp-for="@Model.IsSelected" />
+</td>

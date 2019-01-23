@@ -1,0 +1,3 @@
+[submodule "Graft.Net"]
+	path = Graft.Net
+	url = https://github.com/graft-project/graft-dot-net.git

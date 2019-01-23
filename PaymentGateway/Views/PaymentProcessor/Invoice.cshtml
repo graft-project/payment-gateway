@@ -1,0 +1,100 @@
+﻿@model PaymentGateway.Models.Payment
+
+@{
+    ViewData["Title"] = "QrCode";
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="google" value="notranslate">
+    <title>GRAFT on Terminal (live demo)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <link rel='stylesheet' href='~/css/style.css' type='text/css' media='all' />
+
+</head>
+<body>
+    <input type="hidden" id="paymentId" value="@Html.Raw(Model.Id)" />
+    <div class='maindisplay'>
+        <div class='top-line'>
+        </div>
+
+        <div class='caption'>
+            Use Your Bitcoin Wallet to Scan QR-code*
+        </div>
+
+        <div class='mainsection'>
+            <table>
+                <tr>
+                    <td>
+                        <div class='total'>
+                            Your total:<br>
+                            <span>@Html.Raw(Model.PayAmount.ToString("N8")) @Model.PayCurrency</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><div id="qrCode"></div></td>
+                </tr>
+            </table>
+
+
+        </div>
+
+        <div class='buttonsection'>
+            <a href='@Url.Action("Cancel", "PaymentProcessor", new { id = Model.Id })'><button class='cancel'>Cancel</button></a>
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/qrcode.js"></script>
+    <script type="text/javascript">
+        var intervalID = -1;
+
+        new QRCode(document.getElementById("qrCode"),
+            {
+                text: "@Html.Raw(Model.PayWalletAddress)",
+                width: 181,
+                height: 181
+            });
+
+        function GetStatus() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStatus", "PaymentProcessor", new { id = Model.Id })',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (recData)
+                {
+                    if (recData >= 3 && intervalID != -1) {
+                        clearInterval(intervalID);
+
+                        window.location.href = '@Url.Action("PaymentReceived", "PaymentProcessor", new { id = Model.Id })';
+                    }
+                },
+            });
+        }
+
+        function OnClick() {
+            const el = document.createElement('textarea');
+            el.value = '@Html.Raw(Model.PayWalletAddress)';
+            el.setAttribute('readonly', '');
+            el.style.position = 'absolute';
+            el.style.left = '-9999px';
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
+        intervalID = setInterval(GetStatus, 5000);
+        document.getElementById("qrCode").addEventListener("click", function () { OnClick(); }, false);
+    </script>
+
+</body>
+</html>
+

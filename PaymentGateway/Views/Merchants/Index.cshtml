@@ -1,0 +1,120 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<PaymentGateway.Models.MerchantViewModels.MerchantViewModel>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    ViewData["Title"] = "Merchants";
+    ViewData["ActivePage"] = LeftMenuNavPages.Merchants;
+}
+<br />
+<form method="get" class="form-inline">
+    <input type="hidden" name="sortExpression" value="@Model.SortExpression" />
+    <div class="row">
+        <div class="col-md-2 col-lg-3">
+            <label class="control-label">Status</label>
+            <br />
+            <select name="status" asp-for="@Model.RouteValue["Status"]" class="form-control" asp-items="Html.GetEnumSelectList<MerchantStatus>()">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <div class="col-md-2 col-lg-3">
+            <label class="control-label">Tag id</label>
+            <br />
+            <select name="tagid" asp-for="@Model.RouteValue["TagId"]" class="form-control" asp-items="@(new SelectList(ViewBag.Tags, "Id", "Name"))">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <div class="col-md-4 col-lg-4">
+            <label class="control-label">Search</label>
+            <br />
+            <input name="filter" class="form-control" placeholder="filter" value="@Model.RouteValue["Filter"]" />
+        </div>
+        <div class="col-md-2 col-lg-2">
+            <br />
+            <a asp-action="Invite" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Invite a merchant</a>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2 col-lg-3">
+        </div>
+        <div class="col-md-2 col-lg-3">
+        </div>
+        <div class="col-md-4 col-lg-4">
+        </div>
+        <div class="col-md-2 col-lg-2">
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+            </button>
+        </div>
+    </div>
+</form>
+
+<br />
+
+<p>
+
+</p>
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>
+                @Html.SortableHeaderFor(model => model.Email)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Name)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Address)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.WalletAddress)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.EmailConfirmed)
+            </th>
+            <th>
+                @Html.SortableHeaderFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WalletAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="ResendInvite" asp-route-id="@item.Id">Resend Invite</a> | 
+                    <a asp-action="Index" asp-controller="TagMerchantSelectors" asp-route-id="@item.Id">Set Tags</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Merchants">
+    <vc:pager paging-list="@Model" />
+</nav>
+
+Total Record Count: @Model.TotalRecordCount

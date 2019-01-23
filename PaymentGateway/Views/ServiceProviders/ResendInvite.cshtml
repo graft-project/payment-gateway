@@ -1,0 +1,16 @@
+﻿@model PaymentGateway.Models.UserViewModels.ResendInviteViewModel
+
+@{
+    ViewData["Title"] = "Resend Invite";
+    ViewData["ActivePage"] = LeftMenuNavPages.ServiceProviders;
+}
+
+<h2>Resend Invite to @Model.Email?</h2>
+
+<div>
+    <form asp-action="ResendInvite">
+        <input type="hidden" asp-for="UserID" />
+        <input type="submit" value="Resend" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

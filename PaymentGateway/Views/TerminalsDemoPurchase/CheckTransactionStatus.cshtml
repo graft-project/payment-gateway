@@ -1,0 +1,45 @@
+﻿@model PaymentGateway.Models.CheckTransactionModel
+
+@{
+    ViewData["Title"] = "CheckTransactionStatus";
+}
+
+<h2>Check Transaction Status</h2>
+
+<div>
+    <p>Finish payment with your Bitcoin wallet with QR code or address below.</p>
+    <div id="qrCode"></div>
+    <div id="qrCodeData" data-url="@Html.Raw(Model.Address)"></div>
+    <h4>@Html.Raw(Model.Address)</h4>
+</div>
+
+<div>
+    <h5>Current status:</h5>
+    <h6 id="status">Waiting for update</h6>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript" src="~/lib/qrcode.js"></script>
+    <script type="text/javascript">
+        new QRCode(document.getElementById("qrCode"),
+            {
+                text: "@Html.Raw(Model.Address)",
+                width: 150,
+                height: 150
+            });
+
+        function GetStatus() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetPaymentStatus", "TerminalsDemoPurchase", new { paymentId = Model.PaymentId })',
+                contentType: "application/json; charset=utf-8",
+                //data: { "paymentId" : "@Html.Raw(Model.PaymentId)" },
+                dataType: "json",
+                success: function (recData) { document.getElementById("status").innerText = recData; },
+            });
+        }
+
+        setInterval(GetStatus, 10000);
+    </script>
+}

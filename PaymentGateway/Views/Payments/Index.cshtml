@@ -1,0 +1,218 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<PaymentGateway.Models.PaymentViewModels.PaymentViewModel>
+@using ReflectionIT.Mvc.Paging
+@using Graft.Infrastructure
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    ViewData["Title"] = "Payments";
+    ViewData["ActivePage"] = LeftMenuNavPages.Payments;
+}
+<div class="top-buffer"></div>
+
+
+<form method="get" class="form-inline">
+    <input type="hidden" name="sortExpression" value="@Model.SortExpression" />
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Terminal</label>
+            <br />
+            <select name="terminalId" asp-for="@Model.RouteValue["terminalId"]" class="form-control" asp-items="ViewBag.terminalId">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="control-label">Store</label>
+            <br />
+            <select name="storeId" asp-for="@Model.RouteValue["storeId"]" class="form-control" asp-items="ViewBag.storeId">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="control-label">Merchant</label>
+            <br />
+            <select name="merchantId" asp-for="@Model.RouteValue["merchantId"]" class="form-control" asp-items="ViewBag.merchantId">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Status</label>
+            <br />
+            <select name="status" asp-for="@Model.RouteValue["Status"]" class="form-control" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="control-label">From Date</label>
+            <br />
+            @Html.TextBox("fromDate", String.Format("{0:d}", DateTime.UtcNow.ToShortDateString()), new { @class = "form-control", type = "date" })
+        </div>
+        <br />
+        <div class="form-group">
+            <label class="control-label">To Date</label>
+            <br />
+            @Html.TextBox("toDate", String.Format("{0:d}", DateTime.UtcNow.ToShortDateString()), new { @class = "form-control", type = "date" })
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Service Provider</label>
+            <br />
+            <select name="providerId" asp-for="@Model.RouteValue["providerId"]" class="form-control" asp-items="ViewBag.providerId">
+                <option selected="selected">---</option>
+            </select>
+        </div>
+        <br />
+        <label class="control-label">Search</label>
+        <br />
+        <input name="filter" class="form-control" placeholder="filter" value="@Model.RouteValue["Filter"]" />
+        <br />
+        <label class="control-label"> </label>
+        <br />
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+        </button>
+    </div>
+</form>
+<div class="clear"></div>
+<div class="col-md-12">
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>
+                    @Html.SortableHeaderFor(model => model.TransactionDate)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.SaleAmount)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.SaleCurrency)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.PayAmount)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.PayCurrency)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.PayToSaleRate)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.GraftToSaleRate)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.PayWalletAddress)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.ServiceProviderFee)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.ExchangeBrokerFee)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.MerchantAmount)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.SaleDetails)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.Terminal)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.TerminalName)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.Store)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.Store.Merchant)
+                </th>
+                <th>
+                    @Html.SortableHeaderFor(model => model.ServiceProvider)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SaleAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SaleCurrency)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PayAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PayCurrency)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PayToSaleRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraftToSaleRate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PayWalletAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceProviderFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExchangeBrokerFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MerchantAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SaleDetails)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Terminal.SerialNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TerminalName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MerchantName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
+                    </td>
+
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Payments">
+        <vc:pager paging-list="@Model" />
+    </nav>
+
+    Total Record Count: @Model.TotalRecordCount
+</div>

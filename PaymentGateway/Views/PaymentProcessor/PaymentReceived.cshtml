@@ -1,0 +1,40 @@
+﻿@model PaymentGateway.Models.Payment
+
+@{
+    ViewData["Title"] = "Success";
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="google" value="notranslate">
+    <title>Graft Terminal Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <meta http-equiv="refresh" content="5;URL=@Url.Action("Success", "PaymentProcessor", new { id = Model.Id })" />
+    <link rel='stylesheet' href='~/css/style.css' type='text/css' media='all' />
+</head>
+<body>
+    <div class='maindisplay'>
+        <div class='top-line green'>
+        </div>
+        <br><br><br>
+        <img src='~/images/check.png'>
+        <div class='caption'>
+            Transaction Complete
+        </div>
+        5 seconds to close application...
+
+
+        <div class='buttonsection'>
+            <a href='@Url.Action("Success", "PaymentProcessor", new { id = Model.Id })'><button>Return to the GRAFT Shop</button></a>
+        </div>
+
+    </div>
+
+
+
+</body>
+</html>

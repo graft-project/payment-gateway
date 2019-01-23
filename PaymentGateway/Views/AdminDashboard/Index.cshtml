@@ -1,0 +1,81 @@
+﻿@model Graft.Infrastructure.Watcher.WatcherService
+
+@{
+    ViewData["Title"] = "System State";
+    ViewData["ActivePage"] = LeftMenuNavPages.AdminDashboard;
+}
+
+<h2>System State</h2>
+
+@foreach (var message in Model.Errors)
+{
+    <h6 style="color:red">@message</h6>
+}
+
+<table class="table">
+    @*<thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+            </tr>
+        </thead>*@
+    <tbody>
+        @foreach (var service in Model.Services)
+        {
+            string rowColor = "red";
+            switch (service.State)
+            {
+
+                case Graft.Infrastructure.Watcher.WatchableServiceState.OK:
+                    rowColor = "green";
+                    break;
+                case Graft.Infrastructure.Watcher.WatchableServiceState.Warning:
+                    rowColor = "orange";
+                    break;
+                case Graft.Infrastructure.Watcher.WatchableServiceState.Undefined:
+                    rowColor = "darkgray";
+                    break;
+                case Graft.Infrastructure.Watcher.WatchableServiceState.Error:
+                    rowColor = "red";
+                    break;
+                default:
+                    break;
+            }
+
+            <tr>
+                <td>
+                    <h4 style="color:@rowColor">@service.Name: @service.State</h4>
+                    <br />
+                    Last Operation Time: @service.LastOperationTime
+                    <br />
+                    <br />
+                    <header style="color:darkgray; font-weight:bold">Parameters:</header>
+                    @foreach (var param in service.Parameters)
+                    {
+                        @string.Format("{0} : {1}", param.Key, param.Value)
+                        <br />
+                    }
+                    <br />
+                    <header style="color:darkgray; font-weight:bold">Metrics:</header>
+                    @foreach (var metric in service.Metrics)
+                    {
+                        @string.Format("{0} : {1}", metric.Key, metric.Value)
+                        <br />
+                    }
+                    <br />
+                    <header style="color:darkgray; font-weight:bold">State Change History:</header>
+                    @foreach (var stateChange in service.StateChangeHistory)
+                    {
+                        @string.Format("{0} : {1}", stateChange.Time, stateChange.NewState)
+                        if (!string.IsNullOrEmpty(stateChange.Message))
+                        {
+                            @string.Format(" ({0})", stateChange.Message)
+                        }
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

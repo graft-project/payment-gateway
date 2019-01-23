@@ -1,0 +1,23 @@
+﻿@model PaymentGateway.Models.Tags.TagMerchantSelector
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Apply tags for merchant(@Html.Raw(Model.MerchantId))</h2>
+<form asp-controller="TagMerchantSelectors" asp-action="Index" method="post">
+    <input asp-for="@Model.MerchantId" hidden />
+    <table class="table">
+
+        <tr> <th>Tag name</th> <th>Is enabled</th> </tr>
+
+        @for (int i = 0; i < Model.TagMerchantItems.Count; i++)
+        {
+            <tr>
+                @Html.EditorFor(model => model.TagMerchantItems[i])
+            </tr>
+        }
+
+    </table>
+    <button type="submit">Save</button>
+</form>

@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "GRAFT Payment Gateway";
+    ViewData["ActivePage"] = LeftMenuNavPages.Dashboard;
+}
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isProvider = User.IsInRole("ServiceProvider");
+    var isMerchant = User.IsInRole("Merchant");
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h2>Tables</h2>
+        <ul>
+            <li><a asp-action="Index" asp-controller="Merchants">Merchants</a></li>
+            <li><a asp-action="Index" asp-controller="Stores">Stores</a></li>
+            <li><a asp-action="Index" asp-controller="Terminals">Terminals</a></li>
+            <li><a asp-action="Index" asp-controller="Payments">Payments</a></li>
+            <li><a asp-action="Index" asp-controller="Statistics">Statistics</a></li>
+
+            <li><a asp-action="Index" asp-controller="TagTerminals">Tags for Terminals</a></li>
+            <li><a asp-action="Index" asp-controller="TagMerchants">Tags for Merchants</a></li>
+        </ul>
+    </div>
+
+    @if (isAdmin || isProvider)
+    {
+        <div class="col-md-3">
+            <h2>Demo</h2>
+            <ul>
+                <li><a asp-action="Index" asp-controller="TerminalsDemoPurchase">Demo payment process</a></li>
+            </ul>
+        </div>
+    }
+
+    @if (isAdmin)
+    {
+        <div class="col-md-3">
+            <h2>API</h2>
+            <ul>
+                <li><a href="@Url.Content("~/swagger")">API Docs</a></li>
+            </ul>
+        </div>
+    }
+</div>

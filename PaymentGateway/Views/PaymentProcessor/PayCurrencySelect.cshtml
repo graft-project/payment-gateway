@@ -1,0 +1,58 @@
+﻿@model PaymentGateway.Models.Payment
+
+@{
+    ViewData["Title"] = "Pay Currency Select";
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="google" value="notranslate">
+    <title>Pay Currency Select</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <link rel='stylesheet' href='~/css/style.css' type='text/css' media='all' />
+</head>
+<body>
+
+    <div class='maindisplay'>
+        <div class='top-line'>
+        </div>
+
+        <div class='caption'>
+            GRAFT Payment Gateway
+        </div>
+
+        <div class='mainsection'>
+            GRFT: @Html.RadioButton("Cryptocurrency", "GRFT")
+            BTC: @Html.RadioButton("Cryptocurrency", "BTC")
+            ETH: @Html.RadioButton("Cryptocurrency", "ETH")
+
+        </div>
+
+        <div class='buttonsection'>
+            <button id="b1">Pay</button>
+        </div>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+        function Navigate() {
+
+            var crypto = $('[name=Cryptocurrency]:checked').val();
+
+            var action = '@Url.Action("Invoice", "PaymentProcessor")';
+
+            window.location.href = action + "?currency=" + encodeURI(crypto) + "&id=" + encodeURI("@Model.Id");
+        }
+
+        document.getElementById("b1").addEventListener("click", function () { Navigate(); }, false);
+    </script>
+
+</body>
+</html>
+

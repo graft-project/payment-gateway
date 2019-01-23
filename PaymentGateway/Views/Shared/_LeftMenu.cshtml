@@ -1,0 +1,49 @@
+﻿@using Views.Shared
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isProvider = User.IsInRole("ServiceProvider");
+    var isMerchant = User.IsInRole("Merchant");
+}
+<ul class="nav nav-pills nav-stacked">
+    @if (isAdmin)
+    {
+        <li class="cd-label">Admin:</li>
+        <li class="@LeftMenuNavPages.AdminDashboardNavClass(ViewContext)"><a asp-controller="AdminDashboard" asp-action="Index">System State</a></li>
+        <li class="@LeftMenuNavPages.StatisticsNavClass(ViewContext)"><a asp-controller="Statistics" asp-action="Index">Statistics</a></li>
+        <li class="@LeftMenuNavPages.ServiceProvidersNavClass(ViewContext)"><a asp-controller="ServiceProviders" asp-action="Index">Service Providers</a></li>
+    }
+
+    <li class="cd-label">Main menu:</li>
+    <li class="@LeftMenuNavPages.DashboardNavClass(ViewContext)"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+
+    @if (isAdmin || isProvider)
+    {
+        <li class="@LeftMenuNavPages.MerchantsNavClass(ViewContext)"><a asp-controller="Merchants" asp-action="Index">Merchants</a></li>
+        <li class="@LeftMenuNavPages.TagMerchantsNavClass(ViewContext)"><a asp-controller="TagMerchants" asp-action="Index">Tags for Merchants</a></li>
+    }
+
+    @if (isMerchant)
+    {
+        <li class="@LeftMenuNavPages.StoresNavClass(ViewContext)"><a asp-controller="Stores" asp-action="Index">Stores</a></li>
+    }
+
+    @if (isProvider)
+    {
+        <li class="@LeftMenuNavPages.TerminalsNavClass(ViewContext)"><a asp-controller="SpTerminals" asp-action="Index">Terminals</a></li>
+        <li class="@LeftMenuNavPages.TagTerminalsNavClass(ViewContext)"><a asp-controller="TagTerminals" asp-action="Index">Tags for Terminals</a></li>
+    }
+    else if (isMerchant)
+    {
+        <li class="@LeftMenuNavPages.TerminalsNavClass(ViewContext)"><a asp-controller="MerchantTerminals" asp-action="Index">Terminals</a></li>
+        <li class="@LeftMenuNavPages.TagTerminalsNavClass(ViewContext)"><a asp-controller="TagTerminals" asp-action="Index">Tags for Terminals</a></li>
+        <li class="@LeftMenuNavPages.ApiKeysNavClass(ViewContext)"><a asp-controller="MerchantApiKeys" asp-action="Index">API Keys</a></li>
+    }
+
+    <li class="@LeftMenuNavPages.PaymentsNavClass(ViewContext)"><a asp-controller="Payments" asp-action="Index">Payments History</a></li>
+    @*<li class="cd-label">Reference books:</li>
+        <li class="@LeftMenuNavPages.CurrenciesNavClass(ViewContext)"><a asp-controller="Currencies" asp-action="Index">Currencies</a></li>
+        <li class="@LeftMenuNavPages.CryptocurrenciesNavClass(ViewContext)"><a asp-controller="Cryptocurrencies" asp-action="Index">Cryptocurrencies</a></li>
+        <li class="cd-label">Settings:</li>*@
+    <li class="@LeftMenuNavPages.ProfileNavClass(ViewContext)"><a asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a></li>
+</ul>
+

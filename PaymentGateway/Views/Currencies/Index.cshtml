@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PaymentGateway.Models.Currency>
+@{
+    ViewData["Title"] = "Currencies";
+    ViewData["ActivePage"] = LeftMenuNavPages.Currencies;
+    var isAdmin = User.IsInRole("Admin");
+}
+<div class="top-buffer"></div>
+
+@if (isAdmin)
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create New</a>
+    </p>
+}
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            @if (isAdmin)
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                @if (isAdmin)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Code">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Code">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

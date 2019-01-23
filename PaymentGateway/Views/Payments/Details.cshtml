@@ -1,0 +1,125 @@
+﻿@model PaymentGateway.Models.PaymentViewModels.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    ViewData["ActivePage"] = LeftMenuNavPages.Payments;
+}
+
+<h2>Payment details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SaleAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SaleAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SaleCurrency)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SaleCurrency)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayToSaleRate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayToSaleRate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GraftToSaleRate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GraftToSaleRate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayCurrency)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayCurrency)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayWalletAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayWalletAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProviderFee)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProviderFee)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExchangeBrokerFee)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExchangeBrokerFee)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MerchantAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MerchantAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SaleDetails)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SaleDetails)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProvider)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProvider.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Store)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Store.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Terminal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Terminal.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MerchantName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MerchantName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
