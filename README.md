@@ -186,7 +186,7 @@ sudo openssl dhparam -out /etc/nginx/ssl/dh2048.pem 2048
 ```
 **4.6. Make configuration files for <name> in nginx:**
 ```
-Go to /etc/nginx/conf.d:
+go to /etc/nginx/conf.d:
 cd /etc/nginx/conf.d
 ```
 Create files <name + domain name>.conf 
