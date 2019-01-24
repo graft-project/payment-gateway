@@ -1,19 +1,19 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:600,500,300,700,400&subset=cyrillic,latin);
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
+body{
+	margin: 0;
+	padding: 0;
+  font-family: 'Roboto', sans-serif;  
 }
 
-    body.mainpage {
-        background-image: url(../images/bg.png);
-        background-size: cover;
-        margin: 0;
-    }
+body.mainpage{
+    background-image: url(../images/bg.png);
+    background-size: cover;
+    margin: 0;
+}
 
 .terminal {
-    background-image: url(../images/terminal.png);
+background-image: url(../images/terminal.png);
     width: 100%;
     height: 100%;
     margin: 0 auto;
@@ -33,38 +33,53 @@ body {
     right: 0;
 }
 
+.maincontainer {
+    width: 100%;
+    height: 100%;
+    background-color: #232d3e;
+    text-align: center;
+    position: relative;
+    padding-top: 100px;
+    box-sizing: border-box;
+}	
+
 .maindisplay {
-    width: 648px;
-    height: 464px;
+    width: 640px;
+    height: auto;
+    padding-bottom: 70px;
     background-color: #FAFAFB;
     text-align: center;
     overflow: hidden;
     position: relative;
+    margin: 0 auto 0 auto;
+    box-shadow: 0px 0px 10px #181d27;
+    box-sizing: border-box;
+    border-radius: 12px;
 }
 
-    .maindisplay.black {
-        background-color: #2b2b2b;
-    }
+.maindisplay.black {
+    background-color: #2b2b2b;
+}  
 
 
-.top-line {
-    width: 100%;
-    height: 9px;
-    background-color: #34435B;
+.top-line{
+width:100%;
+height:9px;
+background-color:#34435B;
 }
 
-    .top-line.green {
-        width: 100%;
-        height: 9px;
-        background-color: #4FB67A;
-    }
+.top-line.green{
+width:100%;
+height:9px;
+background-color:#4FB67A;
+}
 
 .caption {
     font-size: 24px;
     text-align: center;
     color: 000;
     font-weight: 400;
-    padding: 14px;
+    padding: 14px 0 4px 0;
 }
 
 .black .caption {
@@ -73,52 +88,48 @@ body {
 
 .mainsection {
     background-color: #fff;
-    margin: 0 46px;
+    margin: 20px;
     padding: 10px;
     font-size: 18px;
     width: auto;
     display: inline-block;
-    height: 310px;
+    height: auto;
     box-sizing: border-box;
     border-radius: 7px;
     box-shadow: 0px 2px 1px 0px #0003;
 }
 
-    .mainsection table {
-        font-size: 18px;
-    }
+.mainsection table {
+    font-size: 18px;  
+}
 
 .blacksection {
     color: #fff;
     padding: 14px;
-}
+}  
 
-    .blacksection table {
-        color: #fff;
-        font-size: 18px;
-    }
+.blacksection table {
+    color: #fff;
+    font-size: 18px;     
+}  
 
-    .blacksection input[type=text] {
-        width: 100%;
-        border: 0;
-        padding: 10px;
-        background-color: #4a4a4a;
-        color: #fff;
-        font-size: 18px;
-    }
-
-    .blacksection button {
-        background-color: #48af48;
-        border: 0;
-        border-radius: 12px;
-        color: #fff;
-        font-size: 20px;
-        padding: 10px;
-    }
-
-.blacksection button.cancelbut {
+.blacksection input[type=text] {
+    width: 100%;
+    border: 0;
+    padding: 10px;
     background-color: #4a4a4a;
-}
+    color: #fff;
+    font-size: 18px;
+}  
+
+.blacksection button {
+    background-color: #48af48;
+    border: 0;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 20px;
+    padding: 10px;
+}  
 
 .greenbuttons button {
     font-size: 18px;
@@ -137,22 +148,22 @@ body {
     text-align: center;
 }
 
-.mainsection table td {
-    padding: 3px 10px;
+.mainsection table td{
+padding:3px 10px;  
+vertical-align:middle;
+}
+
+.mainsection table td span {
+    font-size: 11px;
+    width: 113px;
+    display: inline-block;
+    text-align: center;
     vertical-align: middle;
 }
 
-    .mainsection table td span {
-        font-size: 11px;
-        width: 113px;
-        display: inline-block;
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .mainsection table td img {
-        vertical-align: middle;
-    }
+.mainsection table td img {
+   vertical-align: middle;
+}
 
 .mainsection input[type=text] {
     font-size: 18px;
@@ -169,76 +180,91 @@ body {
     box-sizing: border-box;
 }
 
-    .buttonsection button {
-        font-size: 18px;
-        color: #fff;
-        background-color: #26abe2;
-        border-radius: 7px;
-        text-align: center;
-        padding: 16px;
-        width: 100%;
-        border: 0;
-        box-sizing: border-box;
-    }
+.buttonsection button {
+    font-size: 18px;
+    color: #fff;
+    background-color: #26abe2;
+    border-radius: 7px;
+    text-align: center;
+    padding: 16px;
+    width: 100%;
+    border: 0;
+    box-sizing: border-box;
+}
 
-        .buttonsection button.cancel {
-            background-color: #9B9C9C
-        }
+.buttonsection button.cancel {
+ background-color: #9B9C9C
+}
+
+.buttonsection.twocols button {
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    padding: 16px;
+    width: 49%;
+    border: 0;
+    box-sizing: border-box;
+}
+
 
 .splashscreen {
-    width: 100%;
+width:100%;
 }
 
 .total {
-    text-align: left;
+text-align:center;
 }
 
-.mainsection table td .total span {
-    font-size: 36px;
+.mainsection table td .total  span {
+font-size:36px;
 }
 
 .items {
-    text-align: center;
+text-align:center;
 }
 
 .item {
-    display: inline-block;
-    text-align: center;
-    margin: 0 20px;
+display:inline-block;
+text-align:center;
+margin:0 20px;
+} 
+
+.item img {
+width:44px;
+    border: #fff solid 7px;
 }
 
-    .item img {
-        width: 77px;
-        margin-bottom: 5px;
-    }
-
-        .item img:focus {
-            outline: #26ABE2 solid 3px
-        }
+.item img:focus {
+outline: #26ABE2 solid  3px
+}
 
 input:invalid {
-    box-shadow: 0 0 5px 1px #fe4200;
+  box-shadow: 0 0 5px 1px #fe4200;
 }
 
 
 .item img:active {
-    outline: #26ABE2 solid 3px
+border-radius: 100px;
+    border: #26ABE2 solid 7px;
 }
 
-.item input[type=radio] {
-    display: none;
+.item input[type=radio]
+{
+display:none;
+
 }
 
-.item input[type="radio"]:checked + label img {
-    outline: #26ABE2 solid 3px
-}
+.item input[type="radio"]:checked+label img{ 
+border-radius: 100px;
+border: #26ABE2 solid 7px;
+} 
 
 img.cyrency {
-    padding: 5px 0;
-}
+padding:5px 0;
+}  
 
 .logo {
-    position: absolute;
+position: absolute;
     bottom: 140px;
     right: 20px;
 }
@@ -258,4 +284,68 @@ img.cyrency {
     right: 0;
     border-top: 2px solid #000000;
     background-color: #080808b0;
+}
+
+.status-icon {
+width:60px;
+}
+
+.order-details table{
+    width: 300px;
+    margin: 20px auto;
+    font-size: 12px;
+    background-color: #fff;
+    padding: 4px 12px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    border-radius: 7px;
+}
+
+
+.order-details table tr td:last-child{
+text-align:right;
+}
+
+.order-details table tr td.order-caption {
+text-align:center;
+font-size: 16px;
+}
+
+.order-details table tr td {
+padding:5px;
+}
+
+.order-details table tr td.order-divider {
+width:100%;
+height:1px;
+background: #ccc;
+padding:1px;
+}
+
+.order-total {
+font-weight:bold;
+}
+
+.header {
+    background-color: #34435b;
+    border-radius: 7px 7px 0px 0px;
+}
+
+.toplogo {
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+    padding: 13px;
+}
+
+.order-detail {
+    display: inline-block;
+    color: #fff;
+    float: right;
+    text-align: right;
+    padding: 13px;
+}
+
+.clear {
+clear:both;
 }

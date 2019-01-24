@@ -1,8 +1,9 @@
 ﻿@model PaymentGateway.Models.Payment
-
 @{
-    ViewData["Title"] = "Success";
     Layout = null;
+}
+@{
+    var storeName = Model.Terminal?.Name ?? "Store";
 }
 
 <html>
@@ -11,30 +12,42 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="google" value="notranslate">
-    <title>Graft Terminal Demo</title>
+    <title>Payment Received</title>
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <meta http-equiv="refresh" content="5;URL=@Url.Action("Success", "PaymentProcessor", new { id = Model.Id })" />
     <link rel='stylesheet' href='~/css/style.css' type='text/css' media='all' />
 </head>
 <body>
-    <div class='maindisplay'>
-        <div class='top-line green'>
-        </div>
-        <br><br><br>
-        <img src='~/images/check.png'>
-        <div class='caption'>
-            Transaction Complete
-        </div>
-        5 seconds to close application...
 
+    <div class='maincontainer'>
+        <div class='maindisplay'>
 
-        <div class='buttonsection'>
-            <a href='@Url.Action("Success", "PaymentProcessor", new { id = Model.Id })'><button>Return to the GRAFT Shop</button></a>
+            <div class='header'>
+                <div class='toplogo'>
+                    <img src='~/images/logo.png'>
+                </div>
+                <div class='order-detail'>
+                    @storeName<br>
+                    Your Order ID #@Model.ExternalOrderId
+                </div>
+                <div class='clear'></div>
+            </div>
+            <div class='top-line green'>
+            </div>
+            <br>
+            <img src='~/images/check.png' class='status-icon'>
+            <div class='caption'>
+                You payment is completed!
+            </div>
+            We successfully received @Model.PayAmount.ToString("N8") @Model.PayCurrency from you.
+            <br>
+
+            <div class='buttonsection'>
+                <a href='@Url.Action("Success", "PaymentProcessor", new { id = Model.Id })'><button class='cancel'>Return to @storeName</button></a>
+            </div>
+
         </div>
-
     </div>
-
-
 
 </body>
 </html>

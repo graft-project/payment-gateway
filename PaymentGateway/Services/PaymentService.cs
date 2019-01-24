@@ -86,6 +86,7 @@ namespace PaymentGateway.Services
                 TransactionDate = DateTime.UtcNow,
                 Status = PaymentStatus.New,
 
+                Terminal = terminal,
                 TerminalId = terminal.Id,
                 StoreId = terminal.StoreId,
                 ServiceProviderId = terminal.ServiceProviderId,

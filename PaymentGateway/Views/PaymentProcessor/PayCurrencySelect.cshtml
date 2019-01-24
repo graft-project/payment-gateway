@@ -1,8 +1,9 @@
 ﻿@model PaymentGateway.Models.Payment
-
 @{
-    ViewData["Title"] = "Pay Currency Select";
     Layout = null;
+}
+@{
+    var storeName = Model.Terminal?.Name ?? "Store";
 }
 
 <html>
@@ -16,40 +17,103 @@
     <link rel='stylesheet' href='~/css/style.css' type='text/css' media='all' />
 </head>
 <body>
+    <input type="hidden" id="paymentId" value="@Html.Raw(Model.Id)" />
 
-    <div class='maindisplay'>
-        <div class='top-line'>
+    <div class='maincontainer'>
+
+        <div class='maindisplay'>
+            <div class='header'>
+                <div class='toplogo'>
+                    <img src='~/images/logo.png'>
+                </div>
+                <div class='order-detail'>
+                    @storeName<br>
+                    Your Order ID #@Model.ExternalOrderId
+                </div>
+                <div class='clear'></div>
+            </div>
+
+            <div class='caption'>
+                Choose Cryptocurrency for your payment
+            </div>
+
+            <div class='mainsection'>
+                <table>
+                    <tr>
+                        <td colspan=2 class='items'>
+                            <div class='item'>
+                                <input type='radio' name="Cryptocurrency" id='item1' value="BTC" checked>
+                                <label for='item1'>
+                                    <img src='~/images/bitcoin.png'><br>
+                                    BTC
+                                </label>
+                            </div>
+
+                            <div class='item'>
+                                <input type='radio' name="Cryptocurrency" id='item2' value="ETH">
+                                <label for='item2'>
+                                    <img src='~/images/eth.png'><br>
+                                    ETH
+                                </label>
+                            </div>
+                            <div class='item'>
+                                <input type='radio' name="Cryptocurrency" id='item3' value="GRFT">
+                                <label for='item3'>
+                                    <img src='~/images/graft.png'><br>
+                                    GRFT
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class='order-details'>
+                <table>
+                    @*<tr>
+                            <td class='order-caption' colspan=2>Your Order Details</td>
+                        </tr>
+                        <tr>
+                            <td>Polo X 1</td>
+                            <td>$20</td>
+                        </tr>
+                        <tr>
+                            <td colspan=2 class='order-divider'></td>
+                        </tr>
+                        <tr>
+                            <td>Subtotal</td>
+                            <td>$20</td>
+                        </tr>
+                        <tr>
+                            <td>Shipping</td>
+                            <td>$12</td>
+                        </tr>
+                        <tr>
+                            <td colspan=2 class='order-divider'></td>
+                        </tr>*@
+
+                    <tr>
+                        <td class='caption'>Amount:</td>
+                        <td class='caption'>@Model.SaleAmount.ToString("N2") @Model.SaleCurrency</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class='buttonsection twocols'>
+                <a href='@Url.Action("Cancel", "PaymentProcessor", new { id = Model.Id })'><button class='cancel'>Return to @storeName</button></a>
+                <button id="b1">Pay</button>
+            </div>
         </div>
-
-        <div class='caption'>
-            GRAFT Payment Gateway
-        </div>
-
-        <div class='mainsection'>
-            GRFT: @Html.RadioButton("Cryptocurrency", "GRFT")
-            BTC: @Html.RadioButton("Cryptocurrency", "BTC")
-            ETH: @Html.RadioButton("Cryptocurrency", "ETH")
-
-        </div>
-
-        <div class='buttonsection'>
-            <button id="b1">Pay</button>
-        </div>
-
     </div>
-
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script>
         function Navigate() {
-
             var crypto = $('[name=Cryptocurrency]:checked').val();
-
             var action = '@Url.Action("Invoice", "PaymentProcessor")';
-
             window.location.href = action + "?currency=" + encodeURI(crypto) + "&id=" + encodeURI("@Model.Id");
         }
-
         document.getElementById("b1").addEventListener("click", function () { Navigate(); }, false);
     </script>
 

@@ -84,7 +84,9 @@ namespace PaymentGateway.Controllers
         {
             _cache.TryGetValue(id, out Payment payment);
             if (payment == null)
-                payment = await _db.Payment.FirstOrDefaultAsync(t => t.Id == id);
+                payment = await _db.Payment
+                    .Include(p => p.Terminal)
+                    .FirstOrDefaultAsync(t => t.Id == id);
             return payment;
         }
 
