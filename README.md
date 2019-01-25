@@ -182,6 +182,7 @@ Fill out the prompts appropriately.
 
 While we are using OpenSSL, we should also create a strong Diffie-Hellman group, which is used in negotiating Perfect Forward Secrecy with clients.
 ```
+sudo mkdir /etc/nginx/ssl
 sudo openssl dhparam -out /etc/nginx/ssl/dh2048.pem 2048
 ```
 **4.6. Make configuration files for <name> in nginx:**
