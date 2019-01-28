@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PaymentGateway.Data;
+using PaymentGateway.Models.TagMerchantViewModels;
+using PaymentGateway.Models.Tags;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PaymentGateway.Data;
-using PaymentGateway.Models.Tags;
 
 namespace PaymentGateway.Controllers
 {
@@ -22,13 +20,11 @@ namespace PaymentGateway.Controllers
             _context = context;
         }
 
-        // GET: TagMerchants
         public async Task<IActionResult> Index()
         {
             return View(await _context.TagMerchant.Where(x=>x.User.Id == GetUserId()).ToListAsync());
         }
 
-        // GET: TagMerchants/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,15 +47,11 @@ namespace PaymentGateway.Controllers
             return View(tagMerchant);
         }
 
-        // GET: TagMerchants/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TagMerchants/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description")] TagMerchant tagMerchant)
@@ -76,7 +68,6 @@ namespace PaymentGateway.Controllers
             return View(tagMerchant);
         }
 
-        // GET: TagMerchants/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -97,47 +88,35 @@ namespace PaymentGateway.Controllers
             return View(tagMerchant);
         }
 
-        // POST: TagMerchants/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] TagMerchant tagMerchant)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] TagMerchantViewModel model)
         {
-            if (id != tagMerchant.Id)
-            {
-                return NotFound();
-            }
+            var tagMerchant = await _context.TagMerchant
+                .SingleOrDefaultAsync(s => s.Id == id && s.User.Id == GetUserId());
 
-            if (!CanEditThisConnection(id))
-            {
+            if (tagMerchant == null)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    tagMerchant.Name = model.Name;
+                    tagMerchant.Description = model.Description;
+
                     _context.Update(tagMerchant);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException ex)
                 {
-                    if (!TagMerchantExists(tagMerchant.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(tagMerchant);
         }
 
-        // GET: TagMerchants/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -160,7 +139,6 @@ namespace PaymentGateway.Controllers
             return View(tagMerchant);
         }
 
-        // POST: TagMerchants/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

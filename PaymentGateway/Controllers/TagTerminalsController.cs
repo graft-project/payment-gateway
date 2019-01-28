@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PaymentGateway.Data;
 using PaymentGateway.Models.Tags;
+using PaymentGateway.Models.TagTerminalViewModels;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace PaymentGateway.Controllers
 {
@@ -22,13 +20,11 @@ namespace PaymentGateway.Controllers
             _context = context;
         }
 
-        // GET: TagTerminals
         public async Task<IActionResult> Index()
         {
             return View(await _context.TagTerminals.Where(x=>x.User.Id == GetUserId()).ToListAsync());
         }
 
-        // GET: TagTerminals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,15 +47,11 @@ namespace PaymentGateway.Controllers
             return View(tagTerminal);
         }
 
-        // GET: TagTerminals/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TagTerminals/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description")] TagTerminal tagTerminal)
@@ -75,7 +67,6 @@ namespace PaymentGateway.Controllers
             return View(tagTerminal);
         }
 
-        // GET: TagTerminals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,47 +87,35 @@ namespace PaymentGateway.Controllers
             return View(tagTerminal);
         }
 
-        // POST: TagTerminals/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] TagTerminal tagTerminal)
+        public async Task<IActionResult> EditPost(int id, [Bind("Id,Name,Description")] TagTerminalViewModel model)
         {
-            if (id != tagTerminal.Id)
-            {
-                return NotFound();
-            }
+            var tagTerminal = await _context.TagTerminals
+                .SingleOrDefaultAsync(s => s.Id == id && s.User.Id == GetUserId());
 
-            if (!CanEditThisConnection(id))
-            {
+            if (tagTerminal == null)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    tagTerminal.Name = model.Name;
+                    tagTerminal.Description = model.Description;
+
                     _context.Update(tagTerminal);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException ex)
                 {
-                    if (!TagTerminalExists(tagTerminal.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(tagTerminal);
         }
 
-        // GET: TagTerminals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -159,7 +138,6 @@ namespace PaymentGateway.Controllers
             return View(tagTerminal);
         }
 
-        // POST: TagTerminals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
