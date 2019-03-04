@@ -15,6 +15,7 @@ using PaymentGateway.Middleware;
 using PaymentGateway.Services;
 using ReflectionIT.Mvc.Paging;
 using System;
+using WalletRpc;
 
 namespace PaymentGateway
 {
@@ -42,9 +43,11 @@ namespace PaymentGateway
             });
 
             services.AddSingleton<IRateCache, RateCache>();
-            services.AddSingleton<IGraftDapiService, GraftDapiService>();
+            //services.AddSingleton<IGraftDapiService, GraftDapiService>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IExchangeBroker, ExchangeBroker>();
+            services.AddSingleton<GraftDapi>();
+            services.AddSingleton<WalletPool>();
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IPaymentService, PaymentService>();
@@ -85,7 +88,7 @@ namespace PaymentGateway
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
             ApplicationDbContext context, WatcherService watcher, IRateCache rateCache, 
-            IEmailSender emailService, IGraftDapiService dapi, IExchangeBroker broker)
+            IEmailSender emailService, IExchangeBroker broker)
         {
             if (env.IsDevelopment())
             {
@@ -118,7 +121,6 @@ namespace PaymentGateway
 
             watcher.Add(rateCache);
             watcher.Add(emailService);
-            watcher.Add(dapi);
             watcher.Add(broker);
 
             // comment this line if you want to apply the migrations as a separate process

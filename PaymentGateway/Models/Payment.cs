@@ -69,13 +69,18 @@ namespace PaymentGateway.Models
 
         public int BlockNumber { get; set; }
 
-
+        // for online sells
         public string ExternalOrderId { get; set; }
         public string CallbackUrl { get; set; }
         public string CancelUrl { get; set; }
         public string CompleteUrl { get; set; }
 
-
+        // conversion to stable coin
+        public string ConvertToStableTxId { get; set; }
+        public PaymentStatus ConvertToStableTxStatus { get; set; }
+        public int ConvertToStableBlockNumber { get; set; }
+        public string BrokerGraftWallet { get; set; }
+        public string ConvertToStableTxStatusDescription { get; set; }
 
         // --------------------------------------
         [ForeignKey("ServiceProviderId")]

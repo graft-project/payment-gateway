@@ -92,14 +92,14 @@ namespace PaymentGateway.Controllers
 
         public async Task<IActionResult> GetStatus(string id)
         {
-            var prms = new BrokerSaleStatusParams()
+            var prms = new BrokerExchangeStatusParams()
             {
-                PaymentId = id
+                ExchangeId = id
             };
 
             try
             {
-                var brokerResult = await _broker.GetSaleStatus(prms);
+                var brokerResult = await _broker.ExchangeStatus(prms);
 
                 var payment = await GetPayment(id);
                 if (payment?.CallbackUrl != null)

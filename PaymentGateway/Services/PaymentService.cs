@@ -11,16 +11,19 @@ using Microsoft.Extensions.Logging;
 using PaymentGateway.Data;
 using PaymentGateway.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using WalletRpc;
 
 namespace PaymentGateway.Services
 {
     public class PosApiConfiguration
     {
         public int PaymentTimeout { get; set; }
+        public string IncomeGraftWalletAddress { get; set; }
     }
 
     public class PaymentService : IPaymentService
@@ -32,7 +35,8 @@ namespace PaymentGateway.Services
         readonly IMemoryCache _cache;
         readonly IExchangeBroker _broker;
         readonly IHttpContextAccessor _context;
-        readonly IGraftDapiService _dapi;
+        readonly GraftDapi _dapi;
+        readonly WalletPool _walletPool;
 
         public PaymentService(ILoggerFactory loggerFactory,
             IConfiguration configuration,
@@ -41,7 +45,8 @@ namespace PaymentGateway.Services
             IMemoryCache cache,
             IExchangeBroker broker,
             IHttpContextAccessor context,
-            IGraftDapiService dapi)
+            GraftDapi dapi,
+            WalletPool walletPool)
         {
             _settings = configuration
                 .GetSection("PosApi")
@@ -54,6 +59,7 @@ namespace PaymentGateway.Services
             _broker = broker;
             _context = context;
             _dapi = dapi;
+            _walletPool = walletPool;
         }
 
         public GatewayOnlineSaleResult PrepareOnlineSale(GatewayOnlineSaleParams model, string timestamp, string sign)
@@ -149,30 +155,36 @@ namespace PaymentGateway.Services
                 }
                 else
                 {
-                    var brokerParams = new BrokerSaleParams
+                    var brokerParams = new BrokerExchangeParams
                     {
-                        PaymentId = payment.Id,
-                        SaleAmount = payment.SaleAmount,
-                        SaleCurrency = payment.SaleCurrency,
-                        PayCurrency = currency,
+                        ExchangeId = payment.Id,
+                        FiatCurrency = payment.SaleCurrency,
+                        SellFiatAmount = payment.SaleAmount,
+                        SellCurrency = currency,
+                        BuyCurrency = "GRFT",
+                        WalletAddress = _settings.IncomeGraftWalletAddress
 
-                        ServiceProviderFee = terminal.ServiceProvider.TransactionFee,
-                        ServiceProviderWallet = terminal.ServiceProvider.WalletAddress,
-                        MerchantWallet = terminal.Merchant.WalletAddress
+                        //PaymentId = payment.Id,
+                        //SaleAmount = payment.SaleAmount,
+                        //SaleCurrency = payment.SaleCurrency,
+                        //PayCurrency = currency,
+
+                        //ServiceProviderFee = terminal.ServiceProvider.TransactionFee,
+                        //ServiceProviderWallet = terminal.ServiceProvider.WalletAddress,
+                        //MerchantWallet = terminal.Merchant.WalletAddress
                     };
 
-                    var brokerResult = await _broker.Sale(brokerParams);
+                    var brokerResult = await _broker.Exchange(brokerParams);
 
-                    payment.PayToSaleRate = brokerResult.PayToSaleRate;
-                    payment.GraftToSaleRate = brokerResult.GraftToSaleRate;
+                    payment.PayToSaleRate = brokerResult.SellToUsdRate;
+                    payment.GraftToSaleRate = brokerResult.GraftToUsdRate;
 
-                    payment.PayCurrency = brokerResult.PayCurrency;
-                    payment.PayAmount = brokerResult.PayAmount;
+                    payment.PayCurrency = brokerResult.SellCurrency;
+                    payment.PayAmount = brokerResult.SellAmount;
                     payment.PayWalletAddress = brokerResult.PayWalletAddress;
 
-                    payment.ServiceProviderFee = brokerResult.ServiceProviderFee;
-                    payment.ExchangeBrokerFee = brokerResult.ExchangeBrokerFee;
-                    payment.MerchantAmount = brokerResult.MerchantAmount;
+                    payment.ExchangeBrokerFee = brokerResult.ExchangeBrokerFeeAmount;
+                    payment.MerchantAmount = brokerResult.BuyAmount - brokerResult.ExchangeBrokerFeeAmount;
                 }
 
                 _db.Payment.Add(payment);
@@ -212,6 +224,15 @@ namespace PaymentGateway.Services
                     throw new ApiException(ErrorCode.PaymentNotFoundOrExpired);
             }
 
+            var terminal = _db.Terminal
+                .Where(t => t.Id == payment.TerminalId)
+                .Include(t => t.ServiceProvider)
+                .Include(t => t.Store).ThenInclude(t => t.Merchant)
+                .FirstOrDefault();
+
+            if (terminal == null)
+                throw new ApiException(ErrorCode.InvalidApiKey);
+
             GatewayGetSaleStatusResult res = null;
 
             if (payment.PayCurrency == "GRFT")
@@ -232,22 +253,155 @@ namespace PaymentGateway.Services
             }
             else
             {
-                var brokerParams = new BrokerSaleStatusParams
+                var brokerParams = new BrokerExchangeStatusParams
                 {
-                    PaymentId = id
+                    ExchangeId = id
                 };
 
-                var brokerResult = await _broker.GetSaleStatus(brokerParams);
+                var brokerResult = await _broker.ExchangeStatus(brokerParams);
 
                 res = new GatewayGetSaleStatusResult()
                 {
-                    PaymentId = brokerResult.PaymentId,
+                    PaymentId = brokerResult.ExchangeId,
                     Status = brokerResult.Status
                 };
             }
 
+            if (res.Status >= PaymentStatus.Received && payment.ConvertToStableTxId == null)
+            {
+                payment.Status = res.Status;
+                await ExchangeToStable(payment, terminal);
+
+                _db.Payment.Add(payment);
+                await _db.SaveChangesAsync();
+            }
+
             _logger.LogInformation("API GetSaleStatus Result: {@params}", res);
             return res;
+        }
+
+        async Task ExchangeToStable(Payment payment, Terminal terminal)
+        {
+            try
+            {
+                var prm = new BrokerExchangeToStableParams()
+                {
+                    SellCurrency = "GRFT",
+                    SellAmount = payment.MerchantAmount,
+                    WalletAddress = terminal.ServiceProvider.WalletAddress
+                };
+
+                var exchangeToStableRes = await _broker.ExchangeToStable(prm);
+
+                payment.BrokerGraftWallet = exchangeToStableRes.PayWalletAddress;
+                payment.ConvertToStableTxId = exchangeToStableRes.GraftPaymentId;
+                payment.ConvertToStableBlockNumber = exchangeToStableRes.GraftBlockNumber;
+
+                // pay GRFT to the broker
+                await PayToBroker(payment);
+
+                // check status
+                await _broker.ExchangeToStableStatus(new BrokerExchangeStatusParams { ExchangeId = exchangeToStableRes.ExchangeId });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        async Task PayToBroker(Payment payment)
+        {
+            try
+            {
+                var amount = payment.MerchantAmount;
+                var wallet = _walletPool.GetPayWallet(amount);
+
+                // sale -----------------------------------------
+                var dapiParams = new DapiSaleParams
+                {
+                    PaymentId = payment.ConvertToStableTxId,
+                    SaleDetails = "sale details string",
+                    Address = payment.BrokerGraftWallet,
+                    Amount = GraftConvert.ToAtomicUnits(amount)
+                };
+                var saleResult = await _dapi.Sale(dapiParams).ConfigureAwait(false);
+
+
+                // sale_status -----------------------------------------
+                var dapiStatusParams = new DapiSaleStatusParams
+                {
+                    PaymentId = payment.ConvertToStableTxId,
+                    BlockNumber = saleResult.BlockNumber
+                };
+                var saleStatusResult = await _dapi.GetSaleStatus(dapiStatusParams);
+
+
+                // sale_details -----------------------------------------
+                var dapiSaleDetailsParams = new DapiSaleDetailsParams
+                {
+                    PaymentId = payment.ConvertToStableTxId,
+                    BlockNumber = saleResult.BlockNumber
+                };
+                var saleDetailsResult = await _dapi.SaleDetails(dapiSaleDetailsParams);
+
+
+                // prepare payment
+                var destinations = new List<Destination>();
+
+                // add fee for each node in the AuthSample
+                ulong totalAuthSampleFee = 0;
+                foreach (var item in saleDetailsResult.AuthSample)
+                {
+                    destinations.Add(new Destination { Amount = item.Fee, Address = item.Address });
+                    totalAuthSampleFee += item.Fee;
+                }
+
+                // destination - ServiceProvider
+                destinations.Add(new Destination
+                {
+                    Amount = dapiParams.Amount - totalAuthSampleFee,
+                    Address = dapiParams.Address
+                });
+
+                var transferParams = new TransferParams
+                {
+                    Destinations = destinations.ToArray(),
+                    DoNotRelay = true,
+                    GetTxHex = true,
+                    GetTxMetadata = true,
+                    GetTxKey = true
+                };
+
+                var transferResult = await wallet.TransferRta(transferParams);
+
+                // DAPI pay
+                var payParams = new DapiPayParams
+                {
+                    Address = dapiParams.Address,
+                    PaymentId = dapiParams.PaymentId,
+                    BlockNumber = saleResult.BlockNumber,
+                    Amount = dapiParams.Amount,
+                    Transactions = new string[] { transferResult.TxBlob }
+                };
+
+                var payResult = await _dapi.Pay(payParams);
+
+                saleStatusResult = await _dapi.GetSaleStatus(dapiStatusParams);
+                while ((int)saleStatusResult.Status < (int)DapiSaleStatus.Success)
+                {
+                    saleStatusResult = await _dapi.GetSaleStatus(dapiStatusParams);
+                    await Task.Delay(1000);
+                }
+
+                //payment.ConvertToStableBlockNumber = saleResult.BlockNumber;
+                payment.ConvertToStableTxStatus = GraftDapi.DapiStatusToPaymentStatus(saleStatusResult.Status);
+            }
+            catch (Exception ex)
+            {
+                payment.ConvertToStableTxStatus = PaymentStatus.Fail;
+                payment.ConvertToStableTxStatusDescription = ex.Message;
+            }
         }
 
         public async Task<GatewaySaleResult> Sale(GatewaySaleParams model)
@@ -300,21 +454,26 @@ namespace PaymentGateway.Services
 
         async Task<Payment> AltcoinSale(GatewaySaleParams model, Terminal terminal)
         {
-            var brokerParams = new BrokerSaleParams
+            var brokerParams = new BrokerExchangeParams
             {
-                SaleAmount = model.SaleAmount,
-                SaleCurrency = model.SaleCurrency,
-                PayCurrency = model.PayCurrency,
-                ServiceProviderFee = terminal.ServiceProvider.TransactionFee,
-                ServiceProviderWallet = terminal.ServiceProvider.WalletAddress,
-                MerchantWallet = terminal.Merchant.WalletAddress
+                FiatCurrency = model.SaleCurrency,
+                SellFiatAmount = model.SaleAmount,
+                SellCurrency = model.PayCurrency,
+                BuyCurrency = "GRFT",
+                WalletAddress = terminal.ServiceProvider.WalletAddress
+                //SaleAmount = model.SaleAmount,
+                //SaleCurrency = model.SaleCurrency,
+                //PayCurrency = model.PayCurrency,
+                //ServiceProviderFee = terminal.ServiceProvider.TransactionFee,
+                //ServiceProviderWallet = terminal.ServiceProvider.WalletAddress,
+                //MerchantWallet = terminal.Merchant.WalletAddress
             };
 
-            var brokerResult = await _broker.Sale(brokerParams);
+            var brokerResult = await _broker.Exchange(brokerParams);
 
             var payment = new Payment()
             {
-                Id = brokerResult.PaymentId,
+                Id = brokerResult.ExchangeId,
                 TransactionDate = DateTime.UtcNow,
                 Status = PaymentStatus.New,
 
@@ -322,19 +481,19 @@ namespace PaymentGateway.Services
                 StoreId = terminal.StoreId,
                 ServiceProviderId = terminal.ServiceProviderId,
 
-                SaleAmount = brokerResult.SaleAmount,
-                SaleCurrency = brokerResult.SaleCurrency,
+                SaleAmount = model.SaleAmount,
+                SaleCurrency = model.SaleCurrency,
 
-                PayToSaleRate = brokerResult.PayToSaleRate,
-                GraftToSaleRate = brokerResult.GraftToSaleRate,
+                PayToSaleRate = brokerResult.SellToUsdRate,
+                GraftToSaleRate = brokerResult.GraftToUsdRate,
 
-                PayCurrency = brokerResult.PayCurrency,
-                PayAmount = brokerResult.PayAmount,
+                PayCurrency = brokerResult.SellCurrency,
+                PayAmount = brokerResult.SellAmount,
                 PayWalletAddress = brokerResult.PayWalletAddress,
 
-                ServiceProviderFee = brokerResult.ServiceProviderFee,
-                ExchangeBrokerFee = brokerResult.ExchangeBrokerFee,
-                MerchantAmount = brokerResult.MerchantAmount,
+                //ServiceProviderFee = brokerResult.ServiceProviderFee,
+                ExchangeBrokerFee = brokerResult.ExchangeBrokerFeeAmount,
+                //MerchantAmount = brokerResult.MerchantAmount,
                 SaleDetails = model.SaleDetails,
             };
 

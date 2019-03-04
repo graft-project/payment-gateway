@@ -23,16 +23,6 @@
         </ul>
     </div>
 
-    @if (isAdmin || isProvider)
-    {
-        <div class="col-md-3">
-            <h2>Demo</h2>
-            <ul>
-                <li><a asp-action="Index" asp-controller="TerminalsDemoPurchase">Demo payment process</a></li>
-            </ul>
-        </div>
-    }
-
     @if (isAdmin)
     {
         <div class="col-md-3">
