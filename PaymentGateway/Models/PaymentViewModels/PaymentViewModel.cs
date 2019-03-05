@@ -21,6 +21,9 @@ namespace PaymentGateway.Models.PaymentViewModels
         [Display(Name = "Status")]
         public PaymentStatus Status { get; set; }
 
+        [Display(Name = "Status Message")]
+        public string StatusMessage { get; set; }
+
         [Display(Name = "Sale Amount")]
         [DisplayFormat(DataFormatString = "{0:N7}", ApplyFormatInEditMode = true)]
         public decimal SaleAmount { get; set; }

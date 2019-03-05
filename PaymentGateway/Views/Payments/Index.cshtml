@@ -92,6 +92,9 @@
                     @Html.SortableHeaderFor(model => model.Status)
                 </th>
                 <th>
+                    @Html.SortableHeaderFor(model => model.StatusMessage)
+                </th>
+                <th>
                     @Html.SortableHeaderFor(model => model.SaleAmount)
                 </th>
                 <th>
@@ -146,66 +149,69 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TransactionDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SaleAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SaleCurrency)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PayAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PayCurrency)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PayToSaleRate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraftToSaleRate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PayWalletAddress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ServiceProviderFee)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ExchangeBrokerFee)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MerchantAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SaleDetails)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Terminal.SerialNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TerminalName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Store.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MerchantName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
-                    </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusMessage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaleAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaleCurrency)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayCurrency)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayToSaleRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GraftToSaleRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PayWalletAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceProviderFee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExchangeBrokerFee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MerchantAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaleDetails)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Terminal.SerialNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TerminalName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Store.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MerchantName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceProvider.Name)
+                </td>
 
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    </td>
-                </tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

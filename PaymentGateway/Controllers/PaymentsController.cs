@@ -51,6 +51,7 @@ namespace PaymentGateway.Controllers
                     ServiceProviderId = t.ServiceProviderId,
                     TransactionDate = t.TransactionDate,
                     Status = t.Status,
+                    StatusMessage = t.StatusMessage,
                     SaleAmount = t.SaleAmount,
                     SaleCurrency = t.SaleCurrency,
                     PayToSaleRate = t.PayToSaleRate,

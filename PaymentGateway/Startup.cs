@@ -46,8 +46,7 @@ namespace PaymentGateway
             //services.AddSingleton<IGraftDapiService, GraftDapiService>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddSingleton<IExchangeBroker, ExchangeBroker>();
-            services.AddSingleton<GraftDapi>();
-            services.AddSingleton<WalletPool>();
+            services.AddSingleton<GraftService>();
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IPaymentService, PaymentService>();

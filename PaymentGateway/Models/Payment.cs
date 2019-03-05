@@ -25,7 +25,7 @@ namespace PaymentGateway.Models
 
         [Required]
         public PaymentStatus Status { get; set; }
-
+        public string StatusMessage { get; set; }
 
         [Required]
         public decimal SaleAmount { get; set; }

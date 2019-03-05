@@ -17,20 +17,20 @@ namespace PaymentGateway.Controllers
         readonly ILogger _logger;
         readonly ApplicationDbContext _db;
         readonly IMemoryCache _cache;
-        readonly IExchangeBroker _broker;
+        //readonly IExchangeBroker _broker;
         readonly IPaymentService _paymentService;
 
         public PaymentProcessorController(
             ILoggerFactory loggerFactory,
             ApplicationDbContext db,
-            IExchangeBroker broker,
+            //IExchangeBroker broker,
             IMemoryCache cache,
             IPaymentService paymentService)
         {
             _logger = loggerFactory.CreateLogger(nameof(PaymentProcessorController));
             _db = db;
             _cache = cache;
-            _broker = broker;
+            //_broker = broker;
             _paymentService = paymentService;
         }
 
@@ -92,14 +92,16 @@ namespace PaymentGateway.Controllers
 
         public async Task<IActionResult> GetStatus(string id)
         {
-            var prms = new BrokerExchangeStatusParams()
-            {
-                ExchangeId = id
-            };
+            //var prms = new BrokerExchangeStatusParams()
+            //{
+            //    ExchangeId = id
+            //};
 
             try
             {
-                var brokerResult = await _broker.ExchangeStatus(prms);
+                //var brokerResult = await _broker.ExchangeStatus(prms);
+
+                var res = await _paymentService.GetSaleStatus(id);
 
                 var payment = await GetPayment(id);
                 if (payment?.CallbackUrl != null)
@@ -110,7 +112,7 @@ namespace PaymentGateway.Controllers
                     }
                 }
 
-                return Json((int)brokerResult.Status);
+                return Json((int)res.Status);
             }
             catch (Exception ex)
             {
