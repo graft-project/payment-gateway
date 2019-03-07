@@ -21,10 +21,6 @@ _Note:_ In order to GraftNode (also called the cryptonode) work properly 28680 (
 - OS Linux, version - Needs Ubuntu 18 to build graft node (you have to install it yourself), Connections established from the Node are using P2P network. In order to work properly 28680 port should be opened for incoming and outgoing traffic.
 - MySQL server, version - was tested with 8.0.13 
 - SMTP Server credentials (you have to do it yourself)
-- GRAFT Node instance (you have to do it with:
- https://github.com/graft-project/graft-ng/wiki/Alpha-RTA-Testnet-Install-&-Usage-Instruction)
-> **_You don`t need this step if you installed  it  for Exchange Broker_**
-
 - Exchange Broker (you have to do it with:
  https://github.com/graft-project/exchange-broker/blob/master/README.md)
 - Git
@@ -367,12 +363,27 @@ In this section, you can edit ‘Validity’ and ‘TolerancePeriod’ parameter
  
 **TolerancePeriod** – time period in milliseconds in which it is allowed to use stored exchange rate. This parameter used when there are issues accessing the rate server – in this period if the new rate cannot get, old rate will be used.  After the expiration of the Tolerance Period, an error will be produced when trying to make a payment through the gateway.
  
-**6.5. DAPI** – this section contains GRAFT DAPI URL. You need to setup a GRAFT Supernode instance to get this URL. How to setup the GRAFT Supernode described in the Exchange Broker setup instructions.
-``` 
-  "DAPI": {
-	"Url": "http://18.214.197.50:28690/dapi/v2.0/",
-  },
-``` 
+**6.5. PaymentService** - this section  contains settings for Pay-out Broker.
+```
+  "PaymentService": {
+    "PaymentTimeout": 960000,
+    "DapiUrl": "http://localhost:28690/dapi/v2.0/",
+    "GraftWalletAddress": "F...",
+    "GraftWalletUrl": "http://localhost:29800/"
+  }
+```
+where:
+
+**PaymentTimeout** – wallet time-out (15min)
+
+**DapiUrl** – GRAFT DAPI URL.
+
+**GraftWalletAddress** – Graft Wallet address, which will receive money from the Exchange Broker and from which we will send money to the Exchange Broker to exchange for stable currencies.
+
+**GraftWalletUrl** – RPC address for GRAFT wallet
+
+
+
 **6.6. ExchangeBroker** – this section contains Exchange Broker URL. See the Exchange Broker setup instructions.
 ``` 
   "ExchangeBroker": {
