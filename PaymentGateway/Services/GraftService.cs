@@ -33,7 +33,7 @@ namespace PaymentGateway.Services
             var dapiParams = new DapiSaleParams
             {
                 PaymentId = id,
-                SaleDetails = null,
+                SaleDetails = "exchange",
                 Address = _settings.GraftWalletAddress,
                 Amount = GraftConvert.ToAtomicUnits(amount)
             };
